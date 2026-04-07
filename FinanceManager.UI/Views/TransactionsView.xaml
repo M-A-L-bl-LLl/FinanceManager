@@ -1,0 +1,15 @@
+<UserControl x:Class="FinanceManager.UI.Views.TransactionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <materialDesign:Card Padding="32" UniformCornerRadius="16">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,60">
+            <materialDesign:PackIcon Kind="SwapHorizontalBold" Width="64" Height="64"
+                                     Foreground="#B0BEC5" HorizontalAlignment="Center" />
+            <TextBlock Text="Транзакции" FontSize="22" FontWeight="SemiBold"
+                       Foreground="#1A1A2E" HorizontalAlignment="Center" Margin="0,16,0,8" />
+            <TextBlock Text="Здесь будут все ваши доходы и расходы" Foreground="#78909C"
+                       HorizontalAlignment="Center" FontSize="14" />
+        </StackPanel>
+    </materialDesign:Card>
+</UserControl>

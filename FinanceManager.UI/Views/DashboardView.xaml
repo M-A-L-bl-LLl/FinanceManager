@@ -1,0 +1,132 @@
+<UserControl x:Class="FinanceManager.UI.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+    <StackPanel>
+        <!-- Summary cards -->
+        <Grid Margin="0,0,0,24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Balance -->
+            <materialDesign:Card Grid.Column="0" Padding="24" UniformCornerRadius="16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="40" Height="40" CornerRadius="12" Margin="0,0,12,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                    <GradientStop Color="#7C4DFF" Offset="0" />
+                                    <GradientStop Color="#448AFF" Offset="1" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <materialDesign:PackIcon Kind="WalletOutline" Foreground="White"
+                                                     Width="22" Height="22"
+                                                     HorizontalAlignment="Center"
+                                                     VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Text="Баланс" VerticalAlignment="Center"
+                                   FontSize="14" Foreground="#78909C" />
+                    </StackPanel>
+                    <TextBlock Grid.Row="2" Text="₽ 0.00"
+                               FontSize="28" FontWeight="Bold" Foreground="#1A1A2E" />
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Income -->
+            <materialDesign:Card Grid.Column="2" Padding="24" UniformCornerRadius="16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="40" Height="40" CornerRadius="12" Margin="0,0,12,0" Background="#E8F5E9">
+                            <materialDesign:PackIcon Kind="TrendingUp" Foreground="#4CAF50"
+                                                     Width="22" Height="22"
+                                                     HorizontalAlignment="Center"
+                                                     VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Text="Доходы" VerticalAlignment="Center"
+                                   FontSize="14" Foreground="#78909C" />
+                    </StackPanel>
+                    <TextBlock Grid.Row="2" Text="₽ 0.00"
+                               FontSize="28" FontWeight="Bold" Foreground="#4CAF50" />
+                </Grid>
+            </materialDesign:Card>
+
+            <!-- Expenses -->
+            <materialDesign:Card Grid.Column="4" Padding="24" UniformCornerRadius="16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="40" Height="40" CornerRadius="12" Margin="0,0,12,0" Background="#FFEBEE">
+                            <materialDesign:PackIcon Kind="TrendingDown" Foreground="#F44336"
+                                                     Width="22" Height="22"
+                                                     HorizontalAlignment="Center"
+                                                     VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock Text="Расходы" VerticalAlignment="Center"
+                                   FontSize="14" Foreground="#78909C" />
+                    </StackPanel>
+                    <TextBlock Grid.Row="2" Text="₽ 0.00"
+                               FontSize="28" FontWeight="Bold" Foreground="#F44336" />
+                </Grid>
+            </materialDesign:Card>
+        </Grid>
+
+        <!-- Charts placeholder -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="360" />
+            </Grid.ColumnDefinitions>
+
+            <materialDesign:Card Grid.Column="0" Padding="24" UniformCornerRadius="16" Height="320">
+                <StackPanel>
+                    <TextBlock Text="Динамика за 6 месяцев" FontSize="16"
+                               FontWeight="SemiBold" Foreground="#1A1A2E" Margin="0,0,0,16" />
+                    <Border Height="240" CornerRadius="8" Background="#F4F6FA">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <materialDesign:PackIcon Kind="ChartLine" Width="48" Height="48"
+                                                     Foreground="#B0BEC5" HorizontalAlignment="Center" />
+                            <TextBlock Text="График появится после добавления транзакций"
+                                       Foreground="#90A4AE" Margin="0,8,0,0"
+                                       HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </materialDesign:Card>
+
+            <materialDesign:Card Grid.Column="2" Padding="24" UniformCornerRadius="16" Height="320">
+                <StackPanel>
+                    <TextBlock Text="По категориям" FontSize="16"
+                               FontWeight="SemiBold" Foreground="#1A1A2E" Margin="0,0,0,16" />
+                    <Border Height="240" CornerRadius="8" Background="#F4F6FA">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <materialDesign:PackIcon Kind="ChartDonut" Width="48" Height="48"
+                                                     Foreground="#B0BEC5" HorizontalAlignment="Center" />
+                            <TextBlock Text="Нет данных" Foreground="#90A4AE"
+                                       Margin="0,8,0,0" HorizontalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </materialDesign:Card>
+        </Grid>
+    </StackPanel>
+</UserControl>

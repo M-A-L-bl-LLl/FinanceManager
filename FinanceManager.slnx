@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="FinanceManager.Core/FinanceManager.Core.csproj" />
+  <Project Path="FinanceManager.Data/FinanceManager.Data.csproj" />
+  <Project Path="FinanceManager.Tests/FinanceManager.Tests.csproj" />
+  <Project Path="FinanceManager.UI/FinanceManager.UI.csproj" />
+</Solution>
