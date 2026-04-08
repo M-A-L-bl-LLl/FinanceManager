@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using FinanceManager.Core.Interfaces;
 using FinanceManager.Core.Models;
+using FinanceManager.UI.Services;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
@@ -28,6 +29,21 @@ public partial class DashboardViewModel : BaseViewModel
     [ObservableProperty] private Axis[] xAxes = Array.Empty<Axis>();
     [ObservableProperty] private Axis[] yAxes = Array.Empty<Axis>();
     [ObservableProperty] private IEnumerable<ISeries> pieSeries = Array.Empty<ISeries>();
+    [ObservableProperty] private IEnumerable<PieLegendItem> pieLegendItems = Array.Empty<PieLegendItem>();
+
+    public record PieLegendItem(string Color, string Name, string Amount);
+
+    public SolidColorPaint LegendTextPaint => new(IsDarkTheme
+        ? new SKColor(200, 200, 200)
+        : new SKColor(80, 80, 80));
+
+    public SolidColorPaint? LegendBackgroundPaint => null;
+
+    private bool IsDarkTheme => SettingsService.Load().IsDarkTheme;
+
+    private SKColor LabelColor => IsDarkTheme
+        ? new SKColor(180, 180, 180)
+        : new SKColor(120, 144, 156);
 
     public DashboardViewModel(ITransactionRepository transactionRepo)
     {
@@ -106,7 +122,7 @@ public partial class DashboardViewModel : BaseViewModel
             {
                 Labels = labels,
                 TextSize = 11,
-                LabelsPaint = new SolidColorPaint(new SKColor(120, 144, 156))
+                LabelsPaint = new SolidColorPaint(LabelColor)
             }
         };
 
@@ -115,7 +131,7 @@ public partial class DashboardViewModel : BaseViewModel
             new Axis
             {
                 TextSize = 11,
-                LabelsPaint = new SolidColorPaint(new SKColor(120, 144, 156)),
+                LabelsPaint = new SolidColorPaint(LabelColor),
                 Labeler = v => $"₽ {v:N0}"
             }
         };
@@ -140,6 +156,7 @@ public partial class DashboardViewModel : BaseViewModel
         if (!HasPieData)
         {
             PieSeries = Array.Empty<ISeries>();
+            PieLegendItems = Array.Empty<PieLegendItem>();
             return;
         }
 
@@ -151,12 +168,15 @@ public partial class DashboardViewModel : BaseViewModel
                 Name = item.Name ?? "Другое",
                 Values = new[] { item.Total },
                 Fill = new SolidColorPaint(skColor),
-                Stroke = null,
-                DataLabelsPaint = new SolidColorPaint(SKColors.White),
-                DataLabelsSize = 11,
-                DataLabelsPosition = LiveChartsCore.Measure.PolarLabelsPosition.Middle
+                Stroke = null
             };
         }).ToArray();
+
+        PieLegendItems = groups.Select(item =>
+            new PieLegendItem(
+                item.Color ?? "#607D8B",
+                item.Name ?? "Другое",
+                $"₽ {item.Total:N0}")).ToArray();
     }
 
     private static SKColor ParseHex(string? hex)

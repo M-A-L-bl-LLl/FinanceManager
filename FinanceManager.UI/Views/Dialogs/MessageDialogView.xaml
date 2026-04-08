@@ -54,6 +54,7 @@
                     CommandParameter="true"
                     Background="{Binding IconColor, Converter={StaticResource HexToBrush}}"
                     BorderBrush="{Binding IconColor, Converter={StaticResource HexToBrush}}"
+                    Foreground="White"
                     MinWidth="100" Height="40"
                     Content="{Binding ConfirmText}" />
         </StackPanel>

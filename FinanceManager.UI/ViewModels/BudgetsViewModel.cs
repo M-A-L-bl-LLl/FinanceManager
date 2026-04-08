@@ -30,7 +30,9 @@ public partial class BudgetsViewModel : BaseViewModel
 
     public string MonthDisplay => $"{MonthNames[SelectedMonth - 1]} {SelectedYear}";
 
-    public ObservableCollection<BudgetItemDto> BudgetItems { get; } = new();
+    [ObservableProperty] private bool isCalendarOpen;
+
+public ObservableCollection<BudgetItemDto> BudgetItems { get; } = new();
 
     public BudgetsViewModel(IBudgetRepository budgetRepo, ICategoryRepository categoryRepo,
         ITransactionRepository transactionRepo)
@@ -45,6 +47,14 @@ public partial class BudgetsViewModel : BaseViewModel
         IsLoading = true;
         try { await RefreshAsync(); }
         finally { IsLoading = false; }
+    }
+
+    public async Task GoToMonthAsync(DateTime date)
+    {
+        SelectedMonth = date.Month;
+        SelectedYear = date.Year;
+        IsCalendarOpen = false;
+        await RefreshAsync();
     }
 
     [RelayCommand]

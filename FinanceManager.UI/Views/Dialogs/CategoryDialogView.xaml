@@ -173,7 +173,7 @@
                     Foreground="{DynamicResource MaterialDesign.Brush.ForegroundLight}" Margin="0,0,8,0" Content="ОТМЕНА" />
             <Button Style="{StaticResource MaterialDesignRaisedButton}"
                     Click="SaveButton_Click"
-                    Background="#7C4DFF" BorderBrush="#7C4DFF" Content="СОХРАНИТЬ" />
+                    Background="#7C4DFF" BorderBrush="#7C4DFF" Foreground="White" Content="СОХРАНИТЬ" />
         </StackPanel>
     </Grid>
 </UserControl>

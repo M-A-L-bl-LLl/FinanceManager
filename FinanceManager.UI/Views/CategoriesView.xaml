@@ -62,7 +62,7 @@
             <Button HorizontalAlignment="Right"
                     Command="{Binding AddCategoryCommand}"
                     Style="{StaticResource MaterialDesignRaisedButton}"
-                    Background="#7C4DFF" BorderBrush="#7C4DFF"
+                    Background="#7C4DFF" BorderBrush="#7C4DFF" Foreground="White"
                     Height="40" Padding="16,0">
                 <StackPanel Orientation="Horizontal">
                     <materialDesign:PackIcon Kind="Plus" Width="18" Height="18"

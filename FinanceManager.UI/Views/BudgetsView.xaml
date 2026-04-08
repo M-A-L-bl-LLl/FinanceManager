@@ -30,6 +30,37 @@
                             Foreground="#7C4DFF" Width="36" Height="36">
                         <materialDesign:PackIcon Kind="ChevronRight" Width="22" Height="22" />
                     </Button>
+
+                    <!-- Calendar picker -->
+                    <ToggleButton x:Name="CalendarToggle"
+                                  Style="{StaticResource MaterialDesignActionToggleButton}"
+                                  Foreground="#7C4DFF" Background="Transparent"
+                                  IsChecked="{Binding IsCalendarOpen}"
+                                  Width="36" Height="36"
+                                  Margin="8,0,0,0" ToolTip="Выбрать месяц">
+                        <ToggleButton.Content>
+                            <materialDesign:PackIcon Kind="CalendarMonthOutline" Width="20" Height="20" />
+                        </ToggleButton.Content>
+                        <materialDesign:ToggleButtonAssist.OnContent>
+                            <materialDesign:PackIcon Kind="CalendarMonth" Width="20" Height="20" />
+                        </materialDesign:ToggleButtonAssist.OnContent>
+                    </ToggleButton>
+
+                    <Popup IsOpen="{Binding IsCalendarOpen}"
+                           PlacementTarget="{Binding ElementName=CalendarToggle}"
+                           Placement="Bottom" StaysOpen="False"
+                           AllowsTransparency="True">
+                        <Border Background="{DynamicResource MaterialDesign.Brush.CardBackground}"
+                                BorderBrush="{DynamicResource MaterialDesign.Brush.TextFieldBoxHoverBackground}"
+                                BorderThickness="1" CornerRadius="8">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="12" ShadowDepth="4" Opacity="0.2" Direction="270" />
+                            </Border.Effect>
+                            <Calendar x:Name="MonthCalendar"
+                                      DisplayMode="Year"
+                                      DisplayModeChanged="MonthCalendar_DisplayModeChanged" />
+                        </Border>
+                    </Popup>
                 </StackPanel>
 
                 <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center"
