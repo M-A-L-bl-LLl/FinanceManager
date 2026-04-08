@@ -25,7 +25,7 @@ public partial class App : Application
     {
         // Database
         services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlite("Data Source=finance.db"));
+            options.UseSqlite($"Data Source={SettingsViewModel.DbPath}"));
 
         // Repositories
         services.AddTransient<ITransactionRepository, TransactionRepository>();

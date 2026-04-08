@@ -27,6 +27,20 @@
 - **Бюджеты** — лимиты расходов по категориям на каждый месяц; прогресс-бары с индикацией предупреждения (80%) и превышения (100%); навигация по месяцам со встроенным выбором из календаря
 - **Настройки** — переключение светлой/тёмной темы с сохранением; экспорт и импорт базы данных
 
+### Скриншоты
+
+| Дашборд | Транзакции |
+|---------|-----------|
+| ![Дашборд](Screenshots/Screenshot_dashboard.png) | ![Транзакции](Screenshots/Screenshot_transactions.png) |
+
+| Категории | Бюджеты |
+|-----------|---------|
+| ![Категории](Screenshots/Screenshot_categories.png) | ![Бюджеты](Screenshots/Screenshot_budgets.png) |
+
+| Настройки |
+|-----------|
+| ![Настройки](Screenshots/Screenshot_settings.png) |
+
 ### Стек технологий
 
 | Слой | Технологии |
@@ -83,6 +97,20 @@ dotnet test FinanceManager.Tests/
 - **Categories** — create categories with custom icon and color picker; separate for income and expenses
 - **Budgets** — spending limits by category for each month; progress bars with warning (80%) and over-limit (100%) indicators; month navigation with a built-in calendar picker
 - **Settings** — light/dark theme toggle with persistence; database export and import
+
+### Screenshots
+
+| Dashboard | Transactions |
+|-----------|-------------|
+| ![Dashboard](Screenshots/Screenshot_dashboard.png) | ![Transactions](Screenshots/Screenshot_transactions.png) |
+
+| Categories | Budgets |
+|------------|---------|
+| ![Categories](Screenshots/Screenshot_categories.png) | ![Budgets](Screenshots/Screenshot_budgets.png) |
+
+| Settings |
+|----------|
+| ![Settings](Screenshots/Screenshot_settings.png) |
 
 ### Tech Stack
 

@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using FinanceManager.UI.Services;
 using FinanceManager.UI.Views.Dialogs;
 using MaterialDesignThemes.Wpf;
+using Microsoft.Data.Sqlite;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
@@ -12,8 +13,8 @@ namespace FinanceManager.UI.ViewModels;
 
 public partial class SettingsViewModel : BaseViewModel
 {
-    private static readonly string DbPath =
-        Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "finance.db");
+    public static readonly string DbPath =
+        Path.Combine(AppContext.BaseDirectory, "finance.db");
 
     private bool _loading;
 
@@ -83,9 +84,27 @@ public partial class SettingsViewModel : BaseViewModel
 
         if (confirmed is not "true") return;
 
-        File.Copy(fileDialog.FileName, DbPath, overwrite: true);
+        try
+        {
+            await Task.Run(() =>
+            {
+                SqliteConnection.ClearAllPools();
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                File.Copy(fileDialog.FileName, DbPath, overwrite: true);
+            });
+        }
+        catch (Exception ex)
+        {
+            await ShowAlert("Ошибка импорта", $"Не удалось скопировать файл: {ex.Message}", "AlertOutline", "#F44336");
+            return;
+        }
 
-        Process.Start(Process.GetCurrentProcess().MainModule!.FileName!);
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = Environment.ProcessPath!,
+            UseShellExecute = true
+        });
         Application.Current.Shutdown();
     }
 
