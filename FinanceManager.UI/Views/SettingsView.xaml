@@ -58,6 +58,65 @@
             </StackPanel>
         </materialDesign:Card>
 
+        <!-- Data -->
+        <materialDesign:Card Padding="24" UniformCornerRadius="12" Margin="0,0,0,16">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                    <Border Width="36" Height="36" CornerRadius="10" Margin="0,0,12,0">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#00BCD4" Offset="0" />
+                                <GradientStop Color="#009688" Offset="1" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <materialDesign:PackIcon Kind="DatabaseOutline" Foreground="White"
+                                                 Width="20" Height="20"
+                                                 HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center" />
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Данные" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource MaterialDesign.Brush.Foreground}" />
+                        <TextBlock Text="Резервное копирование и восстановление" FontSize="12"
+                                   Foreground="{DynamicResource MaterialDesign.Brush.ForegroundLight}" />
+                    </StackPanel>
+                </StackPanel>
+
+                <Separator Margin="0,0,0,20"
+                           Background="{DynamicResource MaterialDesign.Brush.CardBackground}" />
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="12" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0"
+                            Command="{Binding ExportDatabaseCommand}"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            HorizontalAlignment="Stretch" Height="44">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="DatabaseExportOutline" Width="18" Height="18"
+                                                     VerticalAlignment="Center" Margin="0,0,8,0" />
+                            <TextBlock Text="Экспорт" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Grid.Column="2"
+                            Command="{Binding ImportDatabaseCommand}"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            HorizontalAlignment="Stretch" Height="44">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="DatabaseImportOutline" Width="18" Height="18"
+                                                     VerticalAlignment="Center" Margin="0,0,8,0" />
+                            <TextBlock Text="Импорт" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </StackPanel>
+        </materialDesign:Card>
+
         <!-- About -->
         <materialDesign:Card Padding="24" UniformCornerRadius="12">
             <StackPanel>
