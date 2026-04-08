@@ -1,7 +1,9 @@
 <UserControl x:Class="FinanceManager.UI.Views.DashboardView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF">
+
     <StackPanel>
         <!-- Summary cards -->
         <Grid Margin="0,0,0,24">
@@ -35,10 +37,10 @@
                                                      VerticalAlignment="Center" />
                         </Border>
                         <TextBlock Text="Баланс" VerticalAlignment="Center"
-                                   FontSize="14" Foreground="#78909C" />
+                                   FontSize="14" Foreground="{DynamicResource MaterialDesign.Brush.ForegroundLight}" />
                     </StackPanel>
-                    <TextBlock Grid.Row="2" Text="₽ 0.00"
-                               FontSize="28" FontWeight="Bold" Foreground="#1A1A2E" />
+                    <TextBlock Grid.Row="2" Text="{Binding Balance}"
+                               FontSize="26" FontWeight="Bold" Foreground="{DynamicResource MaterialDesign.Brush.Foreground}" />
                 </Grid>
             </materialDesign:Card>
 
@@ -58,10 +60,10 @@
                                                      VerticalAlignment="Center" />
                         </Border>
                         <TextBlock Text="Доходы" VerticalAlignment="Center"
-                                   FontSize="14" Foreground="#78909C" />
+                                   FontSize="14" Foreground="{DynamicResource MaterialDesign.Brush.ForegroundLight}" />
                     </StackPanel>
-                    <TextBlock Grid.Row="2" Text="₽ 0.00"
-                               FontSize="28" FontWeight="Bold" Foreground="#4CAF50" />
+                    <TextBlock Grid.Row="2" Text="{Binding Income}"
+                               FontSize="26" FontWeight="Bold" Foreground="#4CAF50" />
                 </Grid>
             </materialDesign:Card>
 
@@ -81,15 +83,15 @@
                                                      VerticalAlignment="Center" />
                         </Border>
                         <TextBlock Text="Расходы" VerticalAlignment="Center"
-                                   FontSize="14" Foreground="#78909C" />
+                                   FontSize="14" Foreground="{DynamicResource MaterialDesign.Brush.ForegroundLight}" />
                     </StackPanel>
-                    <TextBlock Grid.Row="2" Text="₽ 0.00"
-                               FontSize="28" FontWeight="Bold" Foreground="#F44336" />
+                    <TextBlock Grid.Row="2" Text="{Binding Expenses}"
+                               FontSize="26" FontWeight="Bold" Foreground="#F44336" />
                 </Grid>
             </materialDesign:Card>
         </Grid>
 
-        <!-- Charts placeholder -->
+        <!-- Charts -->
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -97,35 +99,72 @@
                 <ColumnDefinition Width="360" />
             </Grid.ColumnDefinitions>
 
+            <!-- Line chart -->
             <materialDesign:Card Grid.Column="0" Padding="24" UniformCornerRadius="16" Height="320">
-                <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
                     <TextBlock Text="Динамика за 6 месяцев" FontSize="16"
-                               FontWeight="SemiBold" Foreground="#1A1A2E" Margin="0,0,0,16" />
-                    <Border Height="240" CornerRadius="8" Background="#F4F6FA">
-                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <materialDesign:PackIcon Kind="ChartLine" Width="48" Height="48"
-                                                     Foreground="#B0BEC5" HorizontalAlignment="Center" />
-                            <TextBlock Text="График появится после добавления транзакций"
-                                       Foreground="#90A4AE" Margin="0,8,0,0"
-                                       HorizontalAlignment="Center" />
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
+                               FontWeight="SemiBold" Foreground="{DynamicResource MaterialDesign.Brush.Foreground}" Margin="0,0,0,8" />
+
+                    <lvc:CartesianChart Grid.Row="1"
+                                        Series="{Binding LineSeries}"
+                                        XAxes="{Binding XAxes}"
+                                        YAxes="{Binding YAxes}"
+                                        LegendPosition="Bottom"
+                                        TooltipPosition="Top" />
+                </Grid>
             </materialDesign:Card>
 
+            <!-- Pie chart -->
             <materialDesign:Card Grid.Column="2" Padding="24" UniformCornerRadius="16" Height="320">
-                <StackPanel>
-                    <TextBlock Text="По категориям" FontSize="16"
-                               FontWeight="SemiBold" Foreground="#1A1A2E" Margin="0,0,0,16" />
-                    <Border Height="240" CornerRadius="8" Background="#F4F6FA">
-                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                            <materialDesign:PackIcon Kind="ChartDonut" Width="48" Height="48"
-                                                     Foreground="#B0BEC5" HorizontalAlignment="Center" />
-                            <TextBlock Text="Нет данных" Foreground="#90A4AE"
-                                       Margin="0,8,0,0" HorizontalAlignment="Center" />
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Расходы по категориям" FontSize="16"
+                               FontWeight="SemiBold" Foreground="{DynamicResource MaterialDesign.Brush.Foreground}" Margin="0,0,0,8" />
+
+                    <!-- Chart -->
+                    <lvc:PieChart Grid.Row="1"
+                                  Series="{Binding PieSeries}"
+                                  LegendPosition="Bottom"
+                                  TooltipPosition="Center">
+                        <lvc:PieChart.Style>
+                            <Style TargetType="lvc:PieChart">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasPieData}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </lvc:PieChart.Style>
+                    </lvc:PieChart>
+
+                    <!-- Empty state -->
+                    <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasPieData}" Value="False">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <materialDesign:PackIcon Kind="ChartDonut" Width="48" Height="48"
+                                                 Foreground="{DynamicResource MaterialDesign.Brush.ForegroundLight}" HorizontalAlignment="Center" />
+                        <TextBlock Text="Нет расходов за этот месяц" Foreground="{DynamicResource MaterialDesign.Brush.ForegroundLight}"
+                                   Margin="0,8,0,0" HorizontalAlignment="Center" FontSize="13" />
+                    </StackPanel>
+                </Grid>
             </materialDesign:Card>
         </Grid>
     </StackPanel>

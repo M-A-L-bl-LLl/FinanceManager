@@ -6,6 +6,7 @@ using FinanceManager.UI.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace FinanceManager.UI;
 
@@ -27,9 +28,9 @@ public partial class App : Application
             options.UseSqlite("Data Source=finance.db"));
 
         // Repositories
-        services.AddScoped<ITransactionRepository, TransactionRepository>();
-        services.AddScoped<ICategoryRepository, CategoryRepository>();
-        services.AddScoped<IBudgetRepository, BudgetRepository>();
+        services.AddTransient<ITransactionRepository, TransactionRepository>();
+        services.AddTransient<ICategoryRepository, CategoryRepository>();
+        services.AddTransient<IBudgetRepository, BudgetRepository>();
 
         // Navigation
         services.AddSingleton<NavigationService>();
@@ -49,6 +50,8 @@ public partial class App : Application
     protected override async void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
+
+        SettingsViewModel.ApplyTheme(SettingsService.Load().IsDarkTheme);
 
         using var scope = _serviceProvider.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();

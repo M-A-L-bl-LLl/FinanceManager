@@ -1,15 +1,190 @@
 <UserControl x:Class="FinanceManager.UI.Views.BudgetsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
-    <materialDesign:Card Padding="32" UniformCornerRadius="16">
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,60">
-            <materialDesign:PackIcon Kind="WalletOutline" Width="64" Height="64"
-                                     Foreground="#B0BEC5" HorizontalAlignment="Center" />
-            <TextBlock Text="Бюджеты" FontSize="22" FontWeight="SemiBold"
-                       Foreground="#1A1A2E" HorizontalAlignment="Center" Margin="0,16,0,8" />
-            <TextBlock Text="Устанавливайте лимиты расходов по категориям" Foreground="#78909C"
-                       HorizontalAlignment="Center" FontSize="14" />
-        </StackPanel>
-    </materialDesign:Card>
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:converters="clr-namespace:FinanceManager.UI.Converters">
+
+    <UserControl.Resources>
+        <converters:HexToColorBrushConverter x:Key="HexToBrush" />
+        <converters:StringToPackIconKindConverter x:Key="StringToIconKind" />
+    </UserControl.Resources>
+
+    <StackPanel>
+
+        <!-- Month navigator -->
+        <materialDesign:Card Padding="20,16" UniformCornerRadius="12" Margin="0,0,0,16">
+            <Grid>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                    <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
+                            Command="{Binding PreviousMonthCommand}"
+                            Foreground="#7C4DFF" Width="36" Height="36">
+                        <materialDesign:PackIcon Kind="ChevronLeft" Width="22" Height="22" />
+                    </Button>
+                    <TextBlock Text="{Binding MonthDisplay}"
+                               FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource MaterialDesign.Brush.Foreground}"
+                               VerticalAlignment="Center" Margin="20,0" MinWidth="180"
+                               TextAlignment="Center" />
+                    <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
+                            Command="{Binding NextMonthCommand}"
+                            Foreground="#7C4DFF" Width="36" Height="36">
+                        <materialDesign:PackIcon Kind="ChevronRight" Width="22" Height="22" />
+                    </Button>
+                </StackPanel>
+
+                <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center"
+                           FontSize="13" Foreground="{DynamicResource MaterialDesign.Brush.ForegroundLight}">
+                    <Run Text="Категорий: " />
+                    <Run Text="{Binding BudgetItems.Count, Mode=OneWay}"
+                         FontWeight="SemiBold" Foreground="{DynamicResource MaterialDesign.Brush.Foreground}" />
+                </TextBlock>
+            </Grid>
+        </materialDesign:Card>
+
+        <!-- Budget items -->
+        <ItemsControl ItemsSource="{Binding BudgetItems}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <materialDesign:Card UniformCornerRadius="12" Margin="0,0,0,12">
+                        <Grid Margin="20,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Category icon -->
+                            <Border Grid.Column="0" Width="44" Height="44" CornerRadius="12"
+                                    Background="{Binding CategoryColor, Converter={StaticResource HexToBrush}}">
+                                <materialDesign:PackIcon Width="24" Height="24" Foreground="White"
+                                                         HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                         Kind="{Binding CategoryIcon, Converter={StaticResource StringToIconKind}}" />
+                            </Border>
+
+                            <!-- Progress info -->
+                            <Grid Grid.Column="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="6" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="6" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <!-- Name + percent -->
+                                <Grid Grid.Row="0">
+                                    <TextBlock Text="{Binding CategoryName}"
+                                               FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource MaterialDesign.Brush.Foreground}" />
+                                    <TextBlock Text="{Binding PercentText}" HorizontalAlignment="Right"
+                                               FontSize="13" FontWeight="Bold"
+                                               Foreground="{Binding StatusColor, Converter={StaticResource HexToBrush}}" />
+                                </Grid>
+
+                                <!-- Progress bar -->
+                                <ProgressBar Grid.Row="2"
+                                             Value="{Binding ProgressPercent, Mode=OneWay}"
+                                             Maximum="100" Height="8">
+                                    <ProgressBar.Style>
+                                        <Style TargetType="ProgressBar" BasedOn="{StaticResource MaterialDesignLinearProgressBar}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Setter Property="Foreground" Value="#4CAF50" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasBudget}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}" Value="Warning">
+                                                    <Setter Property="Foreground" Value="#FF9800" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Status}" Value="Over">
+                                                    <Setter Property="Foreground" Value="#F44336" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ProgressBar.Style>
+                                </ProgressBar>
+
+                                <!-- No budget text -->
+                                <TextBlock Grid.Row="2" Text="Лимит не установлен"
+                                           Foreground="{DynamicResource MaterialDesign.Brush.ForegroundLight}" FontSize="12" FontStyle="Italic">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasBudget}" Value="False">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+
+                                <!-- Spent / Limit -->
+                                <StackPanel Grid.Row="4" Orientation="Horizontal">
+                                    <TextBlock Text="{Binding SpentText}" FontSize="13"
+                                               FontWeight="SemiBold" Foreground="{DynamicResource MaterialDesign.Brush.Foreground}" />
+                                    <TextBlock Text=" " />
+                                    <TextBlock Text="{Binding LimitText}" FontSize="13" Foreground="{DynamicResource MaterialDesign.Brush.ForegroundLight}" />
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Action buttons -->
+                            <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button Style="{StaticResource MaterialDesignIconForegroundButton}"
+                                        Command="{Binding DataContext.SetBudgetCommand,
+                                                          RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"
+                                        Foreground="#7C4DFF" Width="32" Height="32"
+                                        ToolTip="Установить лимит">
+                                    <materialDesign:PackIcon Kind="PencilOutline" Width="16" Height="16" />
+                                </Button>
+                                <Button Command="{Binding DataContext.DeleteBudgetCommand,
+                                                          RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"
+                                        Foreground="#F44336" Width="32" Height="32"
+                                        ToolTip="Удалить лимит">
+                                    <Button.Style>
+                                        <Style TargetType="Button"
+                                               BasedOn="{StaticResource MaterialDesignIconForegroundButton}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasBudget}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                    <materialDesign:PackIcon Kind="DeleteOutline" Width="16" Height="16" />
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </materialDesign:Card>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- Empty state -->
+        <materialDesign:Card UniformCornerRadius="12">
+            <materialDesign:Card.Style>
+                <Style TargetType="materialDesign:Card">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding BudgetItems.Count}" Value="0">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </materialDesign:Card.Style>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,48">
+                <materialDesign:PackIcon Kind="WalletOutline" Width="56" Height="56"
+                                         Foreground="#CFD8DC" HorizontalAlignment="Center" />
+                <TextBlock Text="Нет категорий расходов" FontSize="18" FontWeight="SemiBold"
+                           Foreground="{DynamicResource MaterialDesign.Brush.ForegroundLight}" HorizontalAlignment="Center" Margin="0,16,0,8" />
+                <TextBlock Text="Добавьте категории расходов в разделе «Категории»"
+                           Foreground="{DynamicResource MaterialDesign.Brush.ForegroundLight}" FontSize="14" HorizontalAlignment="Center" />
+            </StackPanel>
+        </materialDesign:Card>
+
+    </StackPanel>
 </UserControl>

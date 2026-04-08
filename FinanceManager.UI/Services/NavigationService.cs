@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using FinanceManager.Core.Interfaces;
+using FinanceManager.UI.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FinanceManager.UI.Services;
@@ -24,5 +25,8 @@ public class NavigationService : ObservableObject, INavigationService
     {
         var viewModel = _serviceProvider.GetRequiredService<TViewModel>();
         CurrentViewModel = viewModel as ObservableObject;
+
+        if (viewModel is BaseViewModel baseVm)
+            _ = baseVm.LoadAsync();
     }
 }

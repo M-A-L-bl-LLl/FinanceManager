@@ -171,15 +171,16 @@
             </Grid>
 
             <!-- ===== MAIN AREA ===== -->
-            <Grid Grid.Column="1" Background="#F4F6FA">
+            <materialDesign:DialogHost Grid.Column="1" Identifier="RootDialog" DialogTheme="Inherit">
+            <Grid Background="{DynamicResource MaterialDesign.Brush.Background}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="64" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <!-- Topbar -->
-                <Border Grid.Row="0" Background="White"
-                        BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
+                <Border Grid.Row="0" Background="{DynamicResource MaterialDesign.Brush.CardBackground}"
+                        BorderBrush="{DynamicResource MaterialDesign.Brush.TextFieldBoxHoverBackground}" BorderThickness="0,0,0,1">
                     <Grid Margin="24,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -189,7 +190,7 @@
                         <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="{Binding CurrentPageTitle}"
                                        FontSize="20" FontWeight="SemiBold"
-                                       Foreground="#1A1A2E"
+                                       Foreground="{DynamicResource MaterialDesign.Brush.Foreground}"
                                        VerticalAlignment="Center" />
                         </StackPanel>
 
@@ -219,6 +220,7 @@
                     <ContentControl Content="{Binding CurrentViewModel}" Margin="24" />
                 </ScrollViewer>
             </Grid>
+            </materialDesign:DialogHost>
         </Grid>
     </Border>
 </Window>
